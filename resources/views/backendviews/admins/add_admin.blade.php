@@ -121,127 +121,124 @@
    @section('script')
      <script>
 
-function myValidate(){
-    let emailObj = document.getElementById('email');
-    let isValid = validateEmail(emailObj.value);
+    function myValidate(){
+        let emailObj = document.getElementById('email');
+        let isValid = validateEmail(emailObj.value);
 
-    if (!isValid) {
-        event.preventDefault();  // Prevent form submission
+        if (!isValid) {
+            event.preventDefault();  // Prevent form submission
+        }
+
+            let mobileObj = document.getElementById('mobile');
+            let checkCount = mobileObj.value;
+            let length = checkCount.length;
+
+            let testLength = checkCountOfMoileNo(length)
+
+            if(!testLength){
+                event.preventDefault();  // Prevent form submission
+            }
+
+            let mobileValidation = validateMobile(mobileObj.value);
+
+            if(!mobileValidation){
+                event.preventDefault();
+            }
+
+            let pwd1 = document.getElementById('password1');
+            let pwd2 = document.getElementById('password2');
+
+            pwd1Value = pwd1.value;
+            pwd2Value = pwd2.value;
+
+            let pwdCheck =passwordCheck(pwd1Value,pwd2Value);
+
+            if(!pwdCheck){
+                event.preventDefault();
+            }
     }
 
 
-    let mobileObj = document.getElementById('mobile');
-    let checkCount = mobileObj.value;
-    let length = checkCount.length;
+    function validateEmail(emailValue){
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailValue))
+        {
+            return true;
+        }else{
 
-    let testLength = checkCountOfMoileNo(length)
+            Swal.fire({
+                icon: 'error',
+                title: 'Email Input',
+                text: 'You have entered an invalid email address!'
+            })
 
-    if(!testLength){
-        event.preventDefault();  // Prevent form submission
+            document.getElementById('email').focus();
+            return false;
+        }
 
     }
 
-    let mobileValidation = validateMobile(mobileObj.value);
+    function validateMobile(mobileValue){
+        var pattern = /^[6,7,8,9][0-9]{0,9}$/;
 
-    if(!mobileValidation){
-        event.preventDefault();
+        if(pattern.test(mobileValue) )
+        {
+            return true;
+        }
+        else
+        {
+            Swal.fire({
+                icon: 'error',
+                title: 'Mobile Input',
+                text: 'Please enter 10 digits Mobile!'
+            })
+            document.getElementById('mobile').focus();
+
+            return false;
+        }
     }
 
-    let pwd1 = document.getElementById('password1');
-    let pwd2 = document.getElementById('password2');
 
-    pwd1Value = pwd1.value;
-    pwd2Value = pwd2.value;
+    function checkCountOfMoileNo(mobilecount){
 
-    let pwdCheck =passwordCheck(pwd1Value,pwd2Value);
-alert(pwdCheck);
-    if(!pwdCheck){
-        event.preventDefault();
-    }
-}
+        if(mobilecount < 10 ){
 
+            Swal.fire({
+                icon: 'error',
+                title: 'Mobile Input',
+                text: 'Mobile No Must Be 10 digits!'
+            })
+            document.getElementById('mobile').focus();
+            return false;
+        }
+        else if(mobilecount > 10){
 
-function validateEmail(emailValue){
-    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailValue))
-	{
-		return true;
-	}else{
-
-        Swal.fire({
-            icon: 'error',
-            title: 'Email Input',
-            text: 'You have entered an invalid email address!'
-        })
-
-        document.getElementById('email').focus();
-
-        //alert("You have entered an invalid email address!");
-        return false;
-    }
-
-}
-
-function validateMobile(mobileValue){
-    var pattern = /^[6,7,8,9][0-9]{0,9}$/;
-
-
-	if(pattern.test(mobileValue) )
-	{
-		return true;
-	}
-	else
-	{
-		//alert("Please enter 10 digits Mobile No.");
-        Swal.fire({
-            icon: 'error',
-            title: 'Mobile Input',
-            text: 'Please enter 10 digits Mobile!'
-        })
-        document.getElementById('mobile').focus();
-
-		return false;
-	}
-}
-
-
-function checkCountOfMoileNo(mobilecount){
-    if(mobilecount < 10 ){
-        Swal.fire({
-            icon: 'error',
-            title: 'Mobile Input',
-            text: 'Mobile No Must Be 10 digits!'
-        })
-        document.getElementById('mobile').focus();
-        return false;
-    }
-    else if(mobilecount > 10){
-        Swal.fire({
-            icon: 'error',
-            title: 'Mobile Input',
-            text: 'Mobile No Must be10 digits!'
-        })
-        document.getElementById('mobile').focus();
-                return false;
-    }
-    return true;
-
-}
-
-
-function passwordCheck(pass1,pass2){
-    alert("inside password");
-    if(pass1 == pass2){
+            Swal.fire({
+                icon: 'error',
+                title: 'Mobile Input',
+                text: 'Mobile No Must be10 digits!'
+            })
+            document.getElementById('mobile').focus();
+                    return false;
+        }
         return true;
+
     }
-    else{
-        Swal.fire({
-            icon: 'error',
-            title: 'Password Input',
-            text: 'Password Does Not Match!'
-        })
-                return false;
+
+
+    function passwordCheck(pass1,pass2){
+        
+        if(pass1 == pass2){
+            return true;
+        }
+        else{
+            Swal.fire({
+                icon: 'error',
+                title: 'Password Input',
+                text: 'Password Does Not Match!'
+            })
+                    return false;
+        }
     }
-}
 
 
 
