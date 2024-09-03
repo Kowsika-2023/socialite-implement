@@ -33,7 +33,7 @@
         </div>
          <div class="block-content block-content-full">
 
-            <form action="{{ route('admins.store') }}" method="POST" >
+            <form action="{{ route('admins.store') }}" method="POST" onsubmit="return myValidate(event)">
                 @csrf
                 @method('post')
 
@@ -58,7 +58,7 @@
 
                   <div class="form-outline mb-4 col-8">
               <label>Mobile</label>
-              <input type="text" maxlength="10" pattern="[6789][0-9]{9}"   name="mobile"  required value="{{ old('mobile')}}" class="form-control form-control-lg"
+              <input type="text" maxlength="10" name="mobile" id="mobile" required value="{{ old('mobile')}}" class="form-control form-control-lg"
                 placeholder="Enter a valid mobile number" />
             </div>
                 @error('mobile')
@@ -69,7 +69,7 @@
             <!-- Email input -->
             <div class="form-outline mb-4 col-8">
               <label>Email</label>
-              <input type="email"  maxlength="255"  name="email"  pattern="[A-Za-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required value="{{ old('email') }}" class="form-control form-control-lg"
+              <input type="email"  maxlength="255"  name="email" id="email" pattern="[A-Za-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required value="{{ old('email') }}" class="form-control form-control-lg"
                 placeholder="Enter a valid email address" /> </div>
                 @error('email')
                 <span class="text text-danger">{{ $message }}</span>
@@ -80,7 +80,7 @@
                  <!-- Password input -->
             <div class="form-outline mb-3 col-8">
               <label>Password</label>
-                <input type="password"  required name="password" id="password1"  maxlength="15" placeholder="Password" class="form-control form-control-lg"
+                <input type="password"  required name="password" id="password1"  maxlength="15" minlength="6" placeholder="Password" class="form-control form-control-lg"
                   />
                   <span toggle="#password-field"  onclick="myPassword()" class="fa fa-fw fa-eye-slash field-icon toggle-password"></span>
 
@@ -103,7 +103,6 @@
               @enderror
 
 
-
               <div class="form-group pt-2">
                 <a href="{{ Route('admins.index') }}"><button type="button" class="btn btn-secondary">Back</button></a>
                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -121,6 +120,150 @@
    @endsection
    @section('script')
      <script>
+
+function myValidate(){
+    let emailObj = document.getElementById('email');
+    let isValid = validateEmail(emailObj.value);
+
+    if (!isValid) {
+        event.preventDefault();  // Prevent form submission
+    }
+
+
+    let mobileObj = document.getElementById('mobile');
+    let checkCount = mobileObj.value;
+    let length = checkCount.length;
+
+    let testLength = checkCountOfMoileNo(length)
+
+    if(!testLength){
+        event.preventDefault();  // Prevent form submission
+
+    }
+
+    let mobileValidation = validateMobile(mobileObj.value);
+
+    if(!mobileValidation){
+        event.preventDefault();
+    }
+
+    let pwd1 = document.getElementById('password1');
+    let pwd2 = document.getElementById('password2');
+
+    pwd1Value = pwd1.value;
+    pwd2Value = pwd2.value;
+
+    let pwdCheck =passwordCheck(pwd1Value,pwd2Value);
+alert(pwdCheck);
+    if(!pwdCheck){
+        event.preventDefault();
+    }
+}
+
+
+function validateEmail(emailValue){
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailValue))
+	{
+		return true;
+	}else{
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Email Input',
+            text: 'You have entered an invalid email address!'
+        })
+
+        document.getElementById('email').focus();
+
+        //alert("You have entered an invalid email address!");
+        return false;
+    }
+
+}
+
+function validateMobile(mobileValue){
+    var pattern = /^[6,7,8,9][0-9]{0,9}$/;
+
+
+	if(pattern.test(mobileValue) )
+	{
+		return true;
+	}
+	else
+	{
+		//alert("Please enter 10 digits Mobile No.");
+        Swal.fire({
+            icon: 'error',
+            title: 'Mobile Input',
+            text: 'Please enter 10 digits Mobile!'
+        })
+        document.getElementById('mobile').focus();
+
+		return false;
+	}
+}
+
+
+function checkCountOfMoileNo(mobilecount){
+    if(mobilecount < 10 ){
+        Swal.fire({
+            icon: 'error',
+            title: 'Mobile Input',
+            text: 'Mobile No Must Be 10 digits!'
+        })
+        document.getElementById('mobile').focus();
+        return false;
+    }
+    else if(mobilecount > 10){
+        Swal.fire({
+            icon: 'error',
+            title: 'Mobile Input',
+            text: 'Mobile No Must be10 digits!'
+        })
+        document.getElementById('mobile').focus();
+                return false;
+    }
+    return true;
+
+}
+
+
+function passwordCheck(pass1,pass2){
+    alert("inside password");
+    if(pass1 == pass2){
+        return true;
+    }
+    else{
+        Swal.fire({
+            icon: 'error',
+            title: 'Password Input',
+            text: 'Password Does Not Match!'
+        })
+                return false;
+    }
+}
+
+
+
+function myPassword() {
+  var x = document.getElementById("password1");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
+
+function myConfirmPassword() {
+  var x = document.getElementById("password2");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
+
+
         var name$ = "hi"; //variable support dollar
         var name_ = "hello"; //variable support under score
 

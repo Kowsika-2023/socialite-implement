@@ -12,4 +12,9 @@ class Post extends Model
         'title',
         'description',
     ];
+
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
 }
